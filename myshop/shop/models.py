@@ -7,6 +7,42 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    SEX = (
+        ('M', 'Man'),
+        ('W', 'Woman')
+    )
+
+    SIZE_PRODUCT = [
+        ('Clothes', (
+            ('S', 'S'),
+            ('M', 'M'),
+            ('L', 'L'),
+            ('XL', 'XL'),
+            ('XXL', 'XXL'),
+            ('XXXL', 'XXXL'),
+            )
+        ),
+
+        ('Shoes', (
+            ('32', '32'),
+            ('33', '33'),
+            ('34', '34'),
+            ('35', '35'),
+            ('36', '36'),
+            ('37', '37'),
+            ('38', '38'),
+            ('39', '39'),
+            ('40', '40'),
+            ('41', '41'),
+            ('42', '42'),
+            ('43', '43'),
+            ('44', '44'),
+            ('45', '45'),
+            )
+        ),
+        ('unknown', 'Unknown'),
+    ]
+
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
     slug = models.SlugField(max_length=128)
@@ -16,6 +52,8 @@ class Product(models.Model):
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    sex = models.CharField(max_length=1, choices=SEX)
+    size = models.CharField(max_length=7, choices=SIZE_PRODUCT)
 
 
 class Order(models.Model):
