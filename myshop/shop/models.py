@@ -1,9 +1,13 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Category(models.Model):
     name = models.CharField(max_length=128)
     slug = models.SlugField(max_length=128, unique=True)
+
+    # def get_absolute_url(self):
+    #     return reverse('shop:product_list_by_category', args=[self.slug])
 
 
 class Product(models.Model):
@@ -54,6 +58,9 @@ class Product(models.Model):
     updated = models.DateTimeField(auto_now=True)
     sex = models.CharField(max_length=1, choices=SEX)
     size = models.CharField(max_length=7, choices=SIZE_PRODUCT)
+
+    # def get_absolute_url(self):
+    #     return reverse('shop:product_detail', args=[self.id, self.slug])
 
 
 class Order(models.Model):
