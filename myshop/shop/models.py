@@ -9,6 +9,14 @@ class Category(models.Model):
     # def get_absolute_url(self):
     #     return reverse('shop:product_list_by_category', args=[self.slug])
 
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'category'
+        verbose_name_plural = 'categories'
+
 
 class Product(models.Model):
     SEX = (
@@ -61,6 +69,13 @@ class Product(models.Model):
 
     # def get_absolute_url(self):
     #     return reverse('shop:product_detail', args=[self.id, self.slug])
+
+    class Meta:
+        ordering = ('name',)
+        index_together = (('id', 'slug'),)
+
+    def __str__(self):
+        return self.name
 
 
 class Order(models.Model):
