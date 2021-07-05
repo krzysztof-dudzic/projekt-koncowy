@@ -17,14 +17,22 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from shop.views import ProductList, ProductDetail
+from shop.views import ProductListView, ProductDetailView, CartRemoveView, CartAddView, CartDetailView
+from shop.views import LoginUserView, LogoutUserView, CreateUserView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', ProductList.as_view(), name='product-list'),
-    path('<slug:category_slug>/', ProductList.as_view(), name='product-list-category'),
-    path('<int:id>/<slug:slug>/', ProductDetail.as_view(), name='product-detail'),
+    path('', ProductListView.as_view(), name='product-list'),
+    path('<slug:category_slug>/', ProductListView.as_view(), name='product-list-category'),
+    path('<int:id>/<slug:slug>/', ProductDetailView.as_view(), name='product-detail'),
     # path('', include('myshop.urls', namespace='shop')),
+    path('cart_detail/', CartDetailView.as_view(), name='cart-detail'),
+    path('add/<int:product_id>/', CartAddView.as_view(), name='cart-add'),
+    path('remove/<int:product_id>/', CartRemoveView.as_view(), name='cart-remove'),
+    path('login/', LoginUserView.as_view(), name='login'),
+    path('logout/', LogoutUserView.as_view(), name='logout'),
+    path('add_user/', CreateUserView.as_view(), name='create-user'),
 
 ]
 

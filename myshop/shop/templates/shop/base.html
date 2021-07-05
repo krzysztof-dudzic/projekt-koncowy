@@ -4,22 +4,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Mój sklep{% endblock %}</title>
+    <title>{% block title %}Mój sklep {% endblock %}</title>
 </head>
 <body>
     <div id="header">
-        <a href="/" class="logo">Mój sklep</a>
+        <a href="{% url 'product-list' %}" class="logo">My mini shop</a>
     </div>
     <div id="subheader">
         <div class="cart">
-            Koszyk jest pusty.
+            {% with total_items=cart|length %}
+                {% if cart|length > 0 %}
+            Cart:
+                <a href="{% url 'cart-detail' %}">
+                    {{ total_items }} product {{ total_items|pluralize:"y" }},
+                    {{ cart.get_total_price }} zł
+                </a>
+                {% else %}
+                The cart is empty.
+                {% endif %}
+            {% endwith %}
         </div>
         <div class="login">
-            Logowanie
+            <a href="{% url 'login' %}">Log in<a/>
+        </div>
+        <div class="login">
+            <a href="{% url 'create-user' %}">Create user<a/>
         </div>
     </div>
     <div id="content">
         {% block content %}
+
         {% endblock %}
     </div>
 </body>
