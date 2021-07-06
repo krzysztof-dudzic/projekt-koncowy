@@ -1,0 +1,28 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}
+The register
+{% endblock title %}
+
+{% block content %}
+<h1>The register</h1>
+
+<div class="order-info">
+    <h3>The Order</h3>
+        <ul>
+            {% for item in cart %}
+                <li>
+
+                    {{ item.quantity }} x {{ item.product.name }}
+                    <span>{{ item.total_price }} zł</span>
+                </li>
+            {% endfor %}
+        </ul>
+        <p>Total value: {{ cart.get_total_price }} zł</p>
+</div>
+
+<form action="." method="post" class="order-form">
+    {{ forms.as_p }}
+    <p><input type="submit" value="Place an order"></p>
+</form>
+{% endblock %}

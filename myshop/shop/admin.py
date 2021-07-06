@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product
+from .models import Category, Product, Order, OrderItem
 
 
 @admin.register(Category)
@@ -16,4 +16,15 @@ class ProductAdmin(admin.ModelAdmin):
     list_editable = ['price', 'available']
     prepopulated_fields = {'slug': ('name',)}
 
+
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    raw_id_fields = ['product']
+
+
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['id', 'first_name', 'last_name', 'email', 'address', 'postal_code',
+                    'city', 'paid', 'created', 'updated']
+    list_filter = ['paid', 'created', 'updated']
+    inlines = [OrderItemInline]
 

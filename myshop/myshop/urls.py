@@ -18,7 +18,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from shop.views import ProductListView, ProductDetailView, CartRemoveView, CartAddView, CartDetailView
-from shop.views import LoginUserView, LogoutUserView, CreateUserView
+from shop.views import LoginUserView, LogoutUserView, CreateUserView, CreateOrderView
 
 
 urlpatterns = [
@@ -33,6 +33,7 @@ urlpatterns = [
     path('login/', LoginUserView.as_view(), name='login'),
     path('logout/', LogoutUserView.as_view(), name='logout'),
     path('add_user/', CreateUserView.as_view(), name='create-user'),
+    path('create_order/', CreateOrderView.as_view(), name='create-order'),
 
 ]
 

@@ -3,9 +3,9 @@ from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import CreateView
 from django.contrib.auth import get_user_model, login, logout, authenticate
-from .forms import CartAddProductForm, LoginForm, CreateUserForm
+from .forms import CartAddProductForm, LoginForm, CreateUserForm, OrderCreateForm
 from shop.cart import Cart
-from shop.models import Category, Product
+from shop.models import Category, Product, OrderItem, Order
 from django.views import View
 
 
@@ -137,3 +137,21 @@ class LogoutUserView(View):
     def get(self, request):
         logout(request)
         return redirect('product-list')
+
+
+class CreateOrderView(View):
+    def get(self, request):
+        cart = Cart(request)
+        form = OrderCreateForm()
+        return render(request, 'shop/order/create_order.html', {'cart': cart, 'form': form})
+
+    def post(self, request):
+        cart = Cart(request)
+        form = OrderCreateForm(request.POST)
+        if form.is_valid():
+            order = form.save()
+            for item in cart:
+                OrderItem.objects.create(
+                    order=order, product=item['product'], price=item['price'], quantity=item['quantity'])
+                cart.clear()
+                return render(request, 'shop/order/created_order.html', {'order': order})

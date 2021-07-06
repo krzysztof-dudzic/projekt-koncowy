@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from .models import Order
 
 PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 101)]
 
@@ -30,3 +31,9 @@ class CreateUserForm(forms.Form):
         pas2 = clean_data['password2']
         if pas1 != pas2:
             raise ValidationError('Hasła się nie zgadzają')
+
+
+class OrderCreateForm(forms.Form):
+    class Meta:
+        model = Order
+        fields = ['first_name', 'last_name', 'email', 'address', 'postal_code', 'city']
