@@ -7,6 +7,16 @@ from .forms import CartAddProductForm, LoginForm, CreateUserForm, OrderCreateFor
 from shop.cart import Cart
 from shop.models import Category, Product, OrderItem, Order
 from django.views import View
+import random
+
+
+class HomePageView(View):
+    def get(self, request):
+        sorted_products = list(Product.objects.all())
+        random.shuffle(sorted_products)
+        three_products = sorted_products[:2]
+        return render(request, 'shop/index.html',
+                      context={'three_products': three_products})
 
 
 class ProductListView(View):
@@ -42,8 +52,9 @@ class CartAddView(View):
         product = get_object_or_404(Product, id=product_id)
         if form.is_valid():
             cd = form.cleaned_data
-            cart.add(product=product, quantity=cd['quantity'], update_quantity=cd['update_quantity'])
+            cart.add(product=product, quantity=cd['quantity'], update_quantity=cd['update'])
         return redirect('cart-detail')
+
 # @require_POST
 # def cart_add(request, product_id):
 #         form = CartAddProductForm(request.POST)
@@ -80,9 +91,16 @@ class CartRemoveView(View):
 class CartDetailView(View):
     def get(self, request):
         cart = Cart(request)
+        # cart = list(cart)
         for item in cart:
             item['update_quantity_form'] = CartAddProductForm(initial={'quantity': item['quantity'], 'override': True})
-        return render(request, 'shop/cart/detail.html', {'cart': cart})
+        return render(request, 'shop/cart/detail.html', context={'cart': cart})
+
+
+class CategoryView(View):
+    def get(self, request):
+        categories = Category.objects.all()
+        return render(request, 'shop/category/category_view.html', context={'categories': categories})
 
 
 class LoginUserView(View):

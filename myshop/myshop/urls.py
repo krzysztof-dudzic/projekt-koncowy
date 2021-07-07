@@ -18,13 +18,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from shop.views import ProductListView, ProductDetailView, CartRemoveView, CartAddView, CartDetailView
-from shop.views import LoginUserView, LogoutUserView, CreateUserView, CreateOrderView
+from shop.views import LoginUserView, LogoutUserView, CreateUserView, CreateOrderView, HomePageView, CategoryView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', ProductListView.as_view(), name='product-list'),
-    path('<slug:category_slug>/', ProductListView.as_view(), name='product-list-category'),
+    path('', HomePageView.as_view(), name='home'),
+    path('products/', ProductListView.as_view(), name='product-list'),
+    path('category/', CategoryView.as_view(), name='category-list'),
     path('<int:id>/<slug:slug>/', ProductDetailView.as_view(), name='product-detail'),
     # path('', include('myshop.urls', namespace='shop')),
     path('cart_detail/', CartDetailView.as_view(), name='cart-detail'),

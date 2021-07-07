@@ -1,0 +1,16 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div id="sidebar">
+        <h1>Categories</h1>
+        <ul>
+            {% for c in categories %}
+                <li class="selected">
+                    <a href="{% url 'home' %}">{{ c.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}
