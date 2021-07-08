@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from .models import Order
@@ -16,21 +17,21 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput, label='Password')
 
 
-class CreateUserForm(forms.Form):
+class CreateUserForm(UserCreationForm):
     username = forms.CharField(max_length=12)
     password = forms.CharField(max_length=16, widget=forms.PasswordInput)
     password2 = forms.CharField(max_length=16, widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = ['username', 'password', 'email']
+        fields = ['username', 'first_name', 'last_name', 'password', 'password2', 'email']
 
     def clean(self):
         clean_data = super().clean()
         pas1 = clean_data['password']
         pas2 = clean_data['password2']
         if pas1 != pas2:
-            raise ValidationError('Hasła się nie zgadzają')
+            raise ValidationError('Passwords are incorrect')
 
 
 class OrderCreateForm(forms.Form):
