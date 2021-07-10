@@ -7,6 +7,8 @@
     <title>{% block title %}Mój sklep {% endblock %}</title>
 </head>
 <body>
+<img class="logo"
+        src="/static/start.jpeg"/>
     <div id="header">
         <a href="{% url 'home' %}" class="logo">My mini shop</a>
     </div>
@@ -25,16 +27,28 @@
             {% endwith %}
         </div>
         <div class="login">
-            <a href="{% url 'login' %}">Log in<a/>
+{#            <a href="{% url 'login' %}">Log in</a>#}
+            <p>You are login as {{ user }}</p>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout' %}">logout</a>
+                    {% else %}
+                        <a href="{% url 'login' %}">login</a>
+                    {% endif %}
         </div>
         <div class="login">
-            <a href="{% url 'create-user' %}">Create user<a/>
+            <a href="{% url 'create-user' %}">Create user</a>
         </div>
     </div>
     <div id="content">
         {% block content %}
 
         {% endblock %}
+    <div>
+        {% block footer %}
+
+
+        {% endblock %}
+    </div>
     </div>
 </body>
 </html>

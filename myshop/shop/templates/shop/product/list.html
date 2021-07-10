@@ -9,14 +9,38 @@
 
     <div id="main" class="product-list">
         <h3>{% if category %}{{ category.name }} {% else %}Products{% endif %}</h3>
-        {% for product in products %}
+        {% for product in page_obj %}
             <div class="item">
                 <a href="{% url 'product-detail' product.id product.slug %}">
-                    <img src="{% if product.image %}{{ product.image.url }} {% else %} {% static "img/no_image.png" %} {% endif %}">
+                    <img src="{% if product.image %}{{ product.image.url }} {% else %} {% static "no_image.png" %} {% endif %}">
                 </a>
                 <a href="{% url 'product-detail' product.id product.slug %}">{{ product.name }}</a><br>
                 {{ product.price }} zł
             </div>
         {% endfor %}
+    </div>
+    <div class="paginate">
+     {% if is_paginated %}
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">
+              <span>< poprzednia</span>
+            </a> |
+          {% endif %}
+
+    {% for i in paginator.page_range %}
+      {% if page_obj.number == i %}
+        <a href="?page={{ page_obj.number }}"><span>{{ page_obj.number }}
+            </span></a> |
+      {% else %}
+        <a href="?page={{ i }}"><span>{{ i }}</span></a> |
+      {% endif %}
+    {% endfor %}
+
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">
+              <span>następna ></span>
+            </a>
+          {% endif %}
+      {% endif %}
     </div>
 {% endblock %}

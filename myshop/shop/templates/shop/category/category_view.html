@@ -7,7 +7,7 @@
         <ul>
             {% for c in categories %}
                 <li class="selected">
-                    <a href="{% url 'home' %}">{{ c.name }}</a>
+                    <a href="{% url 'category-detail' c.slug %}">{{ c.name }}</a>
                 </li>
             {% endfor %}
         </ul>

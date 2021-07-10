@@ -1,8 +1,9 @@
+from django.core.paginator import Paginator, EmptyPage
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView
 from django.contrib.auth import get_user_model, login, logout, authenticate
 from .forms import CartAddProductForm, LoginForm, CreateUserForm, OrderCreateForm
 from shop.cart import Cart
@@ -19,19 +20,26 @@ class HomePageView(View):
         return render(request, 'shop/index.html',
                       context={'three_products': three_products})
 
+#
+# class ProductListView(View):
+#     def get(self, request, category_slug=None):
+#         category = None
+#         categories = Category.objects.all()
+#         products = Product.objects.filter(available=True)
+#         paginator = Paginator
+#         if category_slug:
+#             category = get_object_or_404(Category, slug=category_slug)
+#             products = products.filter(category=category)
+#         return render(request, 'shop/product/list.html',
+#                       {'category': category,
+#                       'categories': categories,
+#                       'products': products})
 
-class ProductListView(View):
-    def get(self, request, category_slug=None):
-        category = None
-        categories = Category.objects.all()
-        products = Product.objects.filter(available=True)
-        if category_slug:
-            category = get_object_or_404(Category, slug=category_slug)
-            products = products.filter(category=category)
-        return render(request, 'shop/product/list.html',
-                      {'category': category,
-                      'categories': categories,
-                      'products': products})
+class ProductListView(ListView):
+    paginate_by = 2
+    model = Product
+    template_name = 'shop/product/list.html'
+
 
 
 class ProductDetailView(View):
@@ -46,6 +54,14 @@ class ProductDetailView(View):
         return render(request, 'shop/product/detail.html', {'product': product, 'cart_product_form': cart_product_form})
 
 
+class CategoryDeatilView(View):
+    def get(self, request, category_slug):
+        category_slug = Category.objects.get(slug=category_slug)
+        products_category = Product.objects.all()
+        return render(request, 'shop/category/category_products.html',
+                      {'category_slug': category_slug, 'products_category': products_category})
+
+
 class CartAddView(View):
     def post(self, request, product_id):
         form = CartAddProductForm(request.POST)
@@ -55,6 +71,17 @@ class CartAddView(View):
             cd = form.cleaned_data
             cart.add(product=product, quantity=cd['quantity'], override_quantity=cd['override'])
         return redirect('cart-detail')
+
+
+# class CartIncreaseView(View):
+#     def post(self, request, product_id):
+#         form = CartAddProductForm(request.POST)
+#         cart = Cart(request)
+#         product = get_object_or_404(Product, id=product_id)
+#         if form.is_valid():
+#             cd = form.cleaned_data
+#             cart.add(product=product, quantity=cd['quantity'], override_quantity=cd['override'])
+#         return redirect('cart-detail')
 
 # @require_POST
 # def cart_add(request, product_id):
@@ -146,7 +173,7 @@ class CreateUserView(View):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
+            raw_password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
             return redirect('home')

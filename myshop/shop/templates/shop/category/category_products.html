@@ -1,0 +1,18 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div id="sidebar">
+        <h1>Categories: {{ category_slug.name }}</h1>
+        <ul>
+            {% for product in products_category %}
+                <li class="selected">
+                <a href="{% url 'product-detail' product.id product.slug %}">
+                    <img src="{% if product.image %}{{ product.image.url }} {% else %} {% static "no_image.png" %} {% endif %}"></a>
+                    <a href="{% url 'product-detail' product.id product.slug %}">{{ product.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}

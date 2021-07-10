@@ -17,17 +17,17 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput, label='Password')
 
 
-class CreateUserForm(UserCreationForm):
+class CreateUserForm(forms.ModelForm):
     username = forms.CharField(max_length=12)
-    password = forms.CharField(max_length=16, widget=forms.PasswordInput)
-    password2 = forms.CharField(max_length=16, widget=forms.PasswordInput)
+    password = forms.CharField(max_length=16,label="Password", widget=forms.PasswordInput)
+    password2 = forms.CharField(max_length=16, label="Repeat password", widget=forms.PasswordInput)
 
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'password', 'password2', 'email']
 
     def clean(self):
-        clean_data = super().clean()
+        clean_data = self.cleaned_data
         pas1 = clean_data['password']
         pas2 = clean_data['password2']
         if pas1 != pas2:

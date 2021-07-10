@@ -17,7 +17,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from shop.views import ProductListView, ProductDetailView, CartRemoveView, CartAddView, CartDetailView
+from shop.views import ProductListView, ProductDetailView, CartRemoveView, CartAddView, CartDetailView, CategoryDeatilView
 from shop.views import LoginUserView, LogoutUserView, CreateUserView, CreateOrderView, HomePageView, CategoryView
 
 
@@ -27,6 +27,7 @@ urlpatterns = [
     path('products/', ProductListView.as_view(), name='product-list'),
     path('category/', CategoryView.as_view(), name='category-list'),
     path('<int:id>/<slug:slug>/', ProductDetailView.as_view(), name='product-detail'),
+    path('category/<slug:category_slug>/', CategoryDeatilView.as_view(), name='category-detail'),
     # path('', include('myshop.urls', namespace='shop')),
     path('cart_detail/', CartDetailView.as_view(), name='cart-detail'),
     path('add/<int:product_id>/', CartAddView.as_view(), name='cart-add'),
