@@ -28,6 +28,7 @@
         </div>
         <div class="login">
 {#            <a href="{% url 'login' %}">Log in</a>#}
+
             <p>You are login as {{ user }}</p>
                     {% if user.is_authenticated %}
                         <a href="{% url 'logout' %}">logout</a>
@@ -37,6 +38,9 @@
         </div>
         <div class="login">
             <a href="{% url 'create-user' %}">Create user</a>
+        </div>
+        <div class="change-password">
+            <a href="{% url 'password-change' %}">Change password</a>
         </div>
     </div>
     <div id="content">

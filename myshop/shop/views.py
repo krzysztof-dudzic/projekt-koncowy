@@ -1,10 +1,13 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, EmptyPage
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import CreateView, ListView
-from django.contrib.auth import get_user_model, login, logout, authenticate
+from django.contrib.auth import get_user_model, login, logout, authenticate, update_session_auth_hash
 from .forms import CartAddProductForm, LoginForm, CreateUserForm, OrderCreateForm
 from shop.cart import Cart
 from shop.models import Category, Product, OrderItem, Order
@@ -41,7 +44,6 @@ class ProductListView(ListView):
     template_name = 'shop/product/list.html'
 
 
-
 class ProductDetailView(View):
     def get(self, request, id, slug):
         product = get_object_or_404(Product, id=id, slug=slug, available=True)
@@ -55,11 +57,10 @@ class ProductDetailView(View):
 
 
 class CategoryDeatilView(View):
-    def get(self, request, category_slug):
-        category_slug = Category.objects.get(slug=category_slug)
-        products_category = Product.objects.all()
+    def get(self, request, category_id):
+        products_category = Product.objects.filter(category=category_id)
         return render(request, 'shop/category/category_products.html',
-                      {'category_slug': category_slug, 'products_category': products_category})
+                      {'products_category': products_category})
 
 
 class CartAddView(View):
@@ -202,3 +203,28 @@ class CreateOrderView(View):
                     order=order, product=item['product'], price=item['price'], quantity=item['quantity'])
                 cart.clear()
                 return render(request, 'shop/order/created_order.html', {'order': order})
+
+
+
+# zakupione produkty przez użytkownika
+class HistoryOrderView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    redirect_field_name = 'shop/history_order/order.html'
+
+
+class PasswordChangeView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = PasswordChangeForm(user=request.user)
+        return render(request, 'shop/user/changepassword.html', {'form': form})
+
+    def post(self, request):
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+        return redirect('password-change-done')
+
+
+class PasswordChangeDoneView(View):
+    def get(self, request):
+        return render(request, 'shop/user/changepassword_done.html')

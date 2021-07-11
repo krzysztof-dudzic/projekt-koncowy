@@ -50,8 +50,7 @@ class Product(models.Model):
             ('43', '43'),
             ('44', '44'),
             ('45', '45'),
-            )
-        ),
+            )),
         ('unknown', 'Unknown'),
     ]
 

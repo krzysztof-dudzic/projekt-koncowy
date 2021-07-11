@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 from shop.views import ProductListView, ProductDetailView, CartRemoveView, CartAddView, CartDetailView, CategoryDeatilView
 from shop.views import LoginUserView, LogoutUserView, CreateUserView, CreateOrderView, HomePageView, CategoryView
-
+from shop.views import HistoryOrderView, PasswordChangeView, PasswordChangeDoneView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,7 +27,7 @@ urlpatterns = [
     path('products/', ProductListView.as_view(), name='product-list'),
     path('category/', CategoryView.as_view(), name='category-list'),
     path('<int:id>/<slug:slug>/', ProductDetailView.as_view(), name='product-detail'),
-    path('category/<slug:category_slug>/', CategoryDeatilView.as_view(), name='category-detail'),
+    path('category/<int:category_id>/', CategoryDeatilView.as_view(), name='category-detail'),
     # path('', include('myshop.urls', namespace='shop')),
     path('cart_detail/', CartDetailView.as_view(), name='cart-detail'),
     path('add/<int:product_id>/', CartAddView.as_view(), name='cart-add'),
@@ -36,6 +36,9 @@ urlpatterns = [
     path('logout/', LogoutUserView.as_view(), name='logout'),
     path('add_user/', CreateUserView.as_view(), name='create-user'),
     path('create_order/', CreateOrderView.as_view(), name='create-order'),
+    path('history_order/', HistoryOrderView.as_view(), name='history-order'),
+    path('password_change/', PasswordChangeView.as_view(), name='password-change'),
+    path('password_change/done/', PasswordChangeDoneView.as_view(), name='password-change-done'),
 
 ]
 
