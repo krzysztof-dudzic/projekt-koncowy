@@ -31,6 +31,9 @@
                 <li class="nav-item ml-4">
                     <a class="nav-link disabled" href="#contact">Contact</a>
                 </li>
+                <li class="nav-item ml-4">
+                    <a class="nav-link" href="/admin/">Adminstrator</a>
+                </li>
             </ul>
         </nav>
     </header>
@@ -44,8 +47,9 @@
                     <div class="container w-75 d-flex">
                         {% if three_products %}
                         <div class="carousel-caption d-block">
+
+                            <img src="{% if three_products.image %}{{ three_products.0.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
                             <h1>{{ three_products.0.name}}</h1>
-                            <h3> {{ three_products.0.description}}</h3>
                         </div>
                     </div>
 
@@ -53,8 +57,9 @@
                 <div class="carousel-item">
                     <div class="container w-75 d-flex">
                         <div class="carousel-caption d-block">
+
+                            <img src="{% if three_products.image %}{{ three_products.1.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
                             <h1>{{ three_products.1.name }}</h1>
-                            <h3> {{ three_products.1.description}}</h3>
                         </div>
                     </div>
                 </div>

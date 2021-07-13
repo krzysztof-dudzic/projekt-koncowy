@@ -24,7 +24,7 @@ Koszyk na zakupy
         <tr>
             <td>
                 <a href="{% url 'product-detail' product.id product.slug %}">
-                    <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "no_image.png" %}{% endif %}">
+                    <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
                 </a>
             </td>
             <td>{{ product.name }}</td>

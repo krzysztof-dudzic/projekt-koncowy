@@ -8,7 +8,7 @@ The register
 <h1>The register</h1>
 
 <div class="order-info">
-    <h3>The Order</h3>
+    <h3>Your Order</h3>
         <ul>
             {% for item in cart %}
                 <li>
@@ -20,8 +20,9 @@ The register
         <p>Total value: {{ cart.get_total_price }} zł</p>
 </div>
 
-<form action="." method="post" class="order-form">
-    {{ forms.as_p }}
-    <p><input type="submit" value="Place an order"></p>
+<form method="post" class="order-form">
+    {{ form.as_p }}
+    <p><input type="submit" value="Place order"></p>
+    {% csrf_token %}
 </form>
 {% endblock %}

@@ -13,7 +13,7 @@ from shop.cart import Cart
 from shop.models import Category, Product, OrderItem, Order
 from django.views import View
 import random
-
+from .tasks import order_created
 
 class HomePageView(View):
     def get(self, request):
@@ -58,9 +58,10 @@ class ProductDetailView(View):
 
 class CategoryDeatilView(View):
     def get(self, request, category_id):
-        products_category = Product.objects.filter(category=category_id)
+        categories_id = Category.objects.get(id=category_id)
+        products_category = Product.objects.filter(category=categories_id)
         return render(request, 'shop/category/category_products.html',
-                      {'products_category': products_category})
+                      {'products_category': products_category, 'categories_id': categories_id})
 
 
 class CartAddView(View):
@@ -201,9 +202,10 @@ class CreateOrderView(View):
             for item in cart:
                 OrderItem.objects.create(
                     order=order, product=item['product'], price=item['price'], quantity=item['quantity'])
-                cart.clear()
-                return render(request, 'shop/order/created_order.html', {'order': order})
-
+            cart.clear()
+            order_created.delay(order.id)
+            return render(request, 'shop/order/created_order.html', {'order': order})
+        return render(request, 'shop/order/create_order.html', {'cart': cart, 'form': form})
 
 
 # zakupione produkty przez użytkownika

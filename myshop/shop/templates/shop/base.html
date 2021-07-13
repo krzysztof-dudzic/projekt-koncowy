@@ -8,7 +8,7 @@
 </head>
 <body>
 <img class="logo"
-        src="/static/start.jpeg"/>
+        src="/static/start/start.jpeg"/>
     <div id="header">
         <a href="{% url 'home' %}" class="logo">My mini shop</a>
     </div>
@@ -27,11 +27,12 @@
             {% endwith %}
         </div>
         <div class="login">
-{#            <a href="{% url 'login' %}">Log in</a>#}
-
-            <p>You are login as {{ user }}</p>
                     {% if user.is_authenticated %}
+                        <p>You are login as {{ user }}</p>
                         <a href="{% url 'logout' %}">logout</a>
+                        <div class="change-password">
+                            <a href="{% url 'password-change' %}">Change password</a>
+                        </div>
                     {% else %}
                         <a href="{% url 'login' %}">login</a>
                     {% endif %}
@@ -39,8 +40,12 @@
         <div class="login">
             <a href="{% url 'create-user' %}">Create user</a>
         </div>
-        <div class="change-password">
-            <a href="{% url 'password-change' %}">Change password</a>
+
+        <div>
+            <h3><a href="{% url 'category-list' %}">All Categories</a></h3>
+        </div>
+        <div>
+            <h3><a href="{% url 'product-list' %}">Return to all products</a></h3>
         </div>
     </div>
     <div id="content">
