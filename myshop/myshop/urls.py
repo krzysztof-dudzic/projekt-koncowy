@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 from shop.views import ProductListView, ProductDetailView, CartRemoveView, CartAddView, CartDetailView, CategoryDeatilView
 from shop.views import LoginUserView, LogoutUserView, CreateUserView, CreateOrderView, HomePageView, CategoryView
-from shop.views import HistoryOrderView, PasswordChangeView, PasswordChangeDoneView
+from shop.views import HistoryOrderView, PasswordChangeView, PasswordChangeDoneView, SearchProductsView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -39,6 +39,7 @@ urlpatterns = [
     path('history_order/', HistoryOrderView.as_view(), name='history-order'),
     path('password_change/', PasswordChangeView.as_view(), name='password-change'),
     path('password_change/done/', PasswordChangeDoneView.as_view(), name='password-change-done'),
+    path('search_products/', SearchProductsView.as_view(), name='search-products'),
 
 ]
 

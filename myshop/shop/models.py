@@ -1,6 +1,10 @@
 from django.db import models
 from django.urls import reverse
 
+'''
+    All models using in the project.
+'''
+
 
 class Category(models.Model):
     name = models.CharField(max_length=128)
