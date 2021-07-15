@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu</title>
+</head>
+<body>
+    <nav class="site-nav">
+        <button class="site-nav-trigger">Menu</button>
+        <div class="site-menu">
+            <ul>
+                {% for c in categories %}
+                <li class="selected">
+                    <a href="{% url 'category-detail' c.id %}">{{ c.name }}</a>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+    </nav>
+</body>
+</html>

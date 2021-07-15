@@ -42,10 +42,6 @@ class ProductDetailView(View):
         cart_product_form = CartAddProductForm()
         return render(request, 'shop/product/detail.html', {'product': product, 'cart_product_form': cart_product_form})
 
-    # def post(self, request, id, slug):
-    #     product = get_object_or_404(Product, id=id, slug=slug, available=True)
-    #     cart_product_form = CartAddProductForm(request.POST)
-    #     return render(request, 'shop/product/detail.html', {'product': product, 'cart_product_form': cart_product_form})
 
 # detail of the category
 class CategoryDeatilView(View):
@@ -153,8 +149,10 @@ class CreateOrderView(View):
 
 # bought products
 class HistoryOrderView(LoginRequiredMixin, View):
-    login_url = '/login/'
-    redirect_field_name = 'shop/history_order/order.html'
+    def get(self, request):
+        orders = OrderItem.objects.all()
+        return render(request, 'shop/history_order/order.html', {'orders': orders})
+
 
 # change password
 class PasswordChangeView(LoginRequiredMixin, View):
@@ -189,3 +187,5 @@ class SearchProductsView(View):
             return render(request, 'shop/product/search_product.html',
                           {'form': form, 'list_of_products': list_of_products})
         return render(request, 'shop/product/search_product.html', {'form': form})
+
+

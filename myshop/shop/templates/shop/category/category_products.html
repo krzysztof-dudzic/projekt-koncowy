@@ -12,6 +12,8 @@
                     <img src="{% if product.image %}{{ product.image.url }} {% else %} {% static "img/no_image.png" %} {% endif %}"></a>
                     <a href="{% url 'product-detail' product.id product.slug %}">{{ product.name }}</a>
                 </li>
+                {% empty %}
+            <h4>No products</h4>
             {% endfor %}
         </ul>
     </div>

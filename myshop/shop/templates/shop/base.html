@@ -4,11 +4,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Mój sklep {% endblock %}</title>
+    <title>{% block title %}My shop {% endblock %}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sticky-footer/">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
 </head>
-<body>
-<img class="logo"
+<body><a href="{% url 'home' %}">
+    <img class="logo"
         src="/static/start/start.jpeg"/>
+</a>
+
     <div id="header">
         <a href="{% url 'home' %}" class="logo">My mini shop</a>
     </div>
@@ -27,15 +35,19 @@
             {% endwith %}
         </div>
         <div class="login">
-                    {% if user.is_authenticated %}
-                        <p>You are login as {{ user }}</p>
-                        <a href="{% url 'logout' %}">logout</a>
-                        <div class="change-password">
-                            <a href="{% url 'password-change' %}">Change password</a>
-                        </div>
-                    {% else %}
-                        <a href="{% url 'login' %}">login</a>
-                    {% endif %}
+            {% if user.is_authenticated %}
+                <p>You are login as {{ user }}</p>
+                <a href="{% url 'logout' %}">log out</a>
+                <div class="change-password">
+                    <a href="{% url 'password-change' %}">Change password</a>
+                </div>
+                <div class="history-order">
+                    <a href="{% url 'history-order' %}">History orders</a>
+                </div>
+
+            {% else %}
+                <a href="{% url 'login' %}">log in</a>
+            {% endif %}
         </div>
         <div class="login">
             <a href="{% url 'create-user' %}">Create user</a>

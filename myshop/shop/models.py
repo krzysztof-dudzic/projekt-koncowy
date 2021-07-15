@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 
 '''
-    All models using in the project.
+    All models used in the project.
 '''
 
 

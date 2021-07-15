@@ -1,1 +1,37 @@
 {% extends 'shop/base.html' %}
+{% load static %}
+
+{% block title %}
+Zakupione produkty
+{% endblock %}
+
+{% block content %}
+<div class="history-products">
+    <h1>Kupione produkty</h1>
+    <table class="history-cart">
+        <thead>
+            <tr>
+                <th>Nr order</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+
+
+            </tr>
+        </thead>
+    <tbody>
+    {% for item in orders %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.price }}</td>
+            <td>{{ item.quantity }}</td>
+
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+
+</div>
+
+{% endblock %}
