@@ -1,8 +1,10 @@
-<!DOCTYPE html>
+
+{#{% load static %}<!DOCTYPE html>#}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Menu</title>
+{#<link rel="stylesheet" href="{% static 'css/menu.css' %}" type="text/css" />#}
 </head>
 <body>
     <nav class="site-nav">
@@ -13,7 +15,7 @@
                 <li class="selected">
                     <a href="{% url 'category-detail' c.id %}">{{ c.name }}</a>
                 </li>
-            {% endfor %}
+                {% endfor %}
             </ul>
         </div>
     </nav>
