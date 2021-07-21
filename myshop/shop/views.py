@@ -1,10 +1,11 @@
+from myshop.settings import BRAINTREE_CONF
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, EmptyPage
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.decorators.http import require_POST
 from django.views.generic import CreateView, ListView
 from django.contrib.auth import get_user_model, login, logout, authenticate, update_session_auth_hash
@@ -14,17 +15,18 @@ from shop.models import Category, Product, OrderItem, Order
 from django.views import View
 import random
 from .tasks import order_created
-
+import braintree
 """
 All views are used in this project.
 """
+gateway = braintree.BraintreeGateway(BRAINTREE_CONF)
 
 # home page
 class HomePageView(View):
     def get(self, request):
         sorted_products = list(Product.objects.all())
         random.shuffle(sorted_products)
-        three_products = sorted_products[:2]
+        three_products = sorted_products[:3]
         return render(request, 'shop/index.html',
                       context={'three_products': three_products})
 
@@ -143,7 +145,9 @@ class CreateOrderView(View):
                     order=order, product=item['product'], price=item['price'], quantity=item['quantity'])
             cart.clear()
             order_created.delay(order.id)
-            return render(request, 'shop/order/created_order.html', {'order': order})
+            request.session['order_id'] = order.id
+            return redirect('payment-process')
+            # return render(request, 'shop/order/created_order.html', {'order': order})
         return render(request, 'shop/order/create_order.html', {'cart': cart, 'form': form})
 
 
@@ -188,4 +192,40 @@ class SearchProductsView(View):
                           {'form': form, 'list_of_products': list_of_products})
         return render(request, 'shop/product/search_product.html', {'form': form})
 
+
+class PaymentProcessView(View):
+    def get(self, request):
+        order_id = request.session.get('order_id')
+        order = get_object_or_404(Order, id=order_id)
+        client_token = braintree.ClientToken.generate()
+        return render(request, 'shop/payment/process.html', {'order': order, 'client_token': client_token})
+
+    def post(self, request):
+        order_id = request.session.get('order_id')
+        order = get_object_or_404(Order, id=order_id)
+        nonce = request.POST.get('payment_method_nonce', None)
+        result = braintree.Transaction.sale({
+            'amount': '{:.2f}'.format(order.get_total_cost()),
+            'payment_method_none': nonce,
+            'options': {
+                'submit_for_settlement': True
+            }
+        })
+        if result.is_success:
+            order.paid = True
+            order.braintree_id = result.transaction.id
+            order.save()
+            return redirect('payment-done')
+        else:
+            return redirect('payment-canceled')
+
+
+class PaymentDoneView(View):
+    def get(self, request):
+        return render(request, 'shop/payment/done.html')
+
+
+class PaymentCanceledView(View):
+    def get(self, request):
+        return render(request, 'shop/payment/canceled.html')
 

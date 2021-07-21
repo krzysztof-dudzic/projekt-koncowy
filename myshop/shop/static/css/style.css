@@ -2,12 +2,12 @@
 /*---- Main style ----*/
 /*------------------------------*/
 :root {
-  --link-color: #00ffcc;
-  --light-link-color: #fffffa;
+  --link-color: #ff6600;
+  --light-link-color: #8b8b2c;
   --background-color: #4b4c4a;
-  --lighter-background-color: #46d2aa;
-  --lighter-text-color: #adc42e;
-  --dark-text: #ad5050;
+  --lighter-background-color: #5a615f;
+  --lighter-text-color: #a0b156;
+  --dark-text: #298eaf;
   --blue: #007bff;
   --yellow: #ffc107;
   --green: #1e7e34;
@@ -34,7 +34,7 @@ p {
 }
 
 .bg-light {
-background: #b45e5e;
+background: #6c1919;
 }
 
 .noPadding {
@@ -55,7 +55,7 @@ background: #b45e5e;
 }
 .btn-color a {
   text-decoration: none;
-  color: var(--light-link-color); 
+  color: var(--light-link-color);
 }
 
 .btn-color:hover {
@@ -70,7 +70,7 @@ hr {
   margin-bottom: 4px;
   clear:both;
   display:block;
-  width: 100%;               
+  width: 100%;
   background-color:var(--background-color);
   height: 1px;
 }
@@ -86,7 +86,7 @@ hr {
 
 .border-3 {
   border-width:3px !important;
-  border-bottom-color: #cacaca !important;
+  border-bottom-color: #d48080 !important;
 }
 
 .view-height {
@@ -172,7 +172,7 @@ margin: 0 auto !important;
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
   opacity: 1 !important;
-  outline: #7a2ec4;
+  outline: #9a3b3b;
   background-image: none;
 }
 
@@ -190,7 +190,7 @@ margin: 0 auto !important;
 }
 
 .carousel-caption {
-  position: center !important;
+  position: relative !important;
   left: 0 !important;
   right: 0 !important;
   font-weight: 600;
@@ -390,7 +390,7 @@ margin: 0 auto !important;
 }
 .dashboard-menu .menu-item:last-child {
   margin-right: 0;
-} 
+}
 .dashboard-menu .menu-item .title {
   display: block;
   padding-top: 10px;
@@ -412,12 +412,12 @@ margin: 0 auto !important;
   margin-left: 15px;
 }
 .alert-info {
-  background: #fff;
+  background: #b69494;
   border: 1px dashed var(--blue);
   color: var(--blue);
 }
 .alert-light {
-  background: #fff;
+  background: #9e7474;
   border: 1px dashed var(--yellow);
   color: var(--yellow);
 }

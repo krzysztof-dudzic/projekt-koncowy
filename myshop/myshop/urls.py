@@ -17,9 +17,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from shop.views import ProductListView, ProductDetailView, CartRemoveView, CartAddView, CartDetailView, CategoryDeatilView
-from shop.views import LoginUserView, LogoutUserView, CreateUserView, CreateOrderView, HomePageView, CategoryView
-from shop.views import HistoryOrderView, PasswordChangeView, PasswordChangeDoneView, SearchProductsView
+from shop.views import *
+
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -40,6 +41,9 @@ urlpatterns = [
     path('password_change/', PasswordChangeView.as_view(), name='password-change'),
     path('password_change/done/', PasswordChangeDoneView.as_view(), name='password-change-done'),
     path('search_products/', SearchProductsView.as_view(), name='search-products'),
+    path('payment_process/', PaymentProcessView.as_view(), name='payment-process'),
+    path('payment_done/', PaymentDoneView.as_view(), name='payment-done'),
+    path('payment_canceled/', PaymentCanceledView.as_view(), name='payment-canceled'),
 
 ]
 
