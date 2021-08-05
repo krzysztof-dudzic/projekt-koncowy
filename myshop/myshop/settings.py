@@ -146,7 +146,7 @@ BRAINTREE_PUBLIC_KEY = 'h62s2tp9vwmp89vs'
 BRAINTREE_PRIVATE_KEY = 'e5b9cd4f7fcf85bb019c34d32c62bc3e'
 
 BRAINTREE_CONF = braintree.Configuration(
-    braintree.Environment.Production,
+    braintree.Environment.Sandbox,
     BRAINTREE_MERCHANT_ID,
     BRAINTREE_PUBLIC_KEY,
     BRAINTREE_PRIVATE_KEY

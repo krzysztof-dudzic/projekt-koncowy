@@ -19,7 +19,7 @@ import braintree
 """
 All views are used in this project.
 """
-gateway = braintree.BraintreeGateway(BRAINTREE_CONF)
+
 
 # home page
 class HomePageView(View):
@@ -176,7 +176,6 @@ class PasswordChangeDoneView(View):
     def get(self, request):
         return render(request, 'shop/user/changepassword_done.html')
 
-
 # search product
 class SearchProductsView(View):
     def get(self, request):
@@ -191,6 +190,8 @@ class SearchProductsView(View):
             return render(request, 'shop/product/search_product.html',
                           {'form': form, 'list_of_products': list_of_products})
         return render(request, 'shop/product/search_product.html', {'form': form})
+
+gateway = braintree.BraintreeGateway(BRAINTREE_CONF)
 
 
 class PaymentProcessView(View):
