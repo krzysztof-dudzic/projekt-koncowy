@@ -230,3 +230,4 @@ class PaymentCanceledView(View):
     def get(self, request):
         return render(request, 'shop/payment/canceled.html')
 
+

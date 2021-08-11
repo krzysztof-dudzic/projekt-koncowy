@@ -37,8 +37,8 @@ def export_to_csv(modeladmin, request, queryset):
         for field in fields:
             value = getattr(obj, field.name)
             if isinstance(value, datetime.datetime):
-                value = value.strftime('%d/%m/&Y')
-            data_row.append(data_row)
+                value = value.strftime('%d/%m/%y')
+            data_row.append(value)
         writer.writerow(data_row)
     return response
 export_to_csv.short_description = 'Eksport do CSV'
