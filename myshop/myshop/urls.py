@@ -44,7 +44,8 @@ urlpatterns = [
     path('payment_process/', PaymentProcessView.as_view(), name='payment-process'),
     path('payment_done/', PaymentDoneView.as_view(), name='payment-done'),
     path('payment_canceled/', PaymentCanceledView.as_view(), name='payment-canceled'),
-
+    path('admin/order/<int:order_id>/', staff_member_required(AdminOrder.as_view()), name='admin-order'),
+    path('admin/order/<int:order_id>/pdf/', staff_member_required(AdminOrderPdf.as_view()), name='admin-order-pdf'),
 ]
 
 if settings.DEBUG:

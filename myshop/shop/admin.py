@@ -3,6 +3,9 @@ from .models import Category, Product, Order, OrderItem
 import csv
 import datetime
 from django.http import HttpResponse
+from django.urls import reverse
+from django.utils.safestring import mark_safe
+
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -43,10 +46,20 @@ def export_to_csv(modeladmin, request, queryset):
     return response
 export_to_csv.short_description = 'Eksport do CSV'
 
+
+def order_detail(obj):
+    return mark_safe('<a href="{}">View</a>'.format(reverse('admin-order', args=[obj.id])))
+
+
+def order_pdf(obj):
+    return mark_safe('<a href="{}">PDF</a>'.format(reverse('admin-order-pdf', args=[obj.id])))
+order_pdf.short_description = 'Recipe'
+
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'first_name', 'last_name', 'email', 'address', 'postal_code',
-                    'city', 'paid', 'created', 'updated']
+                    'city', 'paid', 'created', 'updated', order_detail, order_pdf]
     list_filter = ['paid', 'created', 'updated']
     inlines = [OrderItemInline]
     actions = [export_to_csv]
