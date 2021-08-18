@@ -19,6 +19,7 @@ import braintree
 from django.template.loader import render_to_string
 import weasyprint
 from django.conf import settings
+from .tasks import payment_completed
 from django.contrib.admin.views.decorators import staff_member_required
 """
 All views are used in this project.
@@ -195,22 +196,24 @@ class SearchProductsView(View):
                           {'form': form, 'list_of_products': list_of_products})
         return render(request, 'shop/product/search_product.html', {'form': form})
 
-gateway = braintree.BraintreeGateway(BRAINTREE_CONF)
+gateway = braintree.BraintreeGateway(settings.BRAINTREE_CONF)
 
 
 class PaymentProcessView(View):
     def get(self, request):
         order_id = request.session.get('order_id')
         order = get_object_or_404(Order, id=order_id)
-        client_token = braintree.ClientToken.generate()
+        # total_cost = order.get_total_cost()
+        client_token = gateway.client_token.generate()
         return render(request, 'shop/payment/process.html', {'order': order, 'client_token': client_token})
 
     def post(self, request):
         order_id = request.session.get('order_id')
         order = get_object_or_404(Order, id=order_id)
+        total_cost = order.get_total_cost()
         nonce = request.POST.get('payment_method_nonce', None)
-        result = braintree.Transaction.sale({
-            'amount': '{:.2f}'.format(order.get_total_cost()),
+        result = gateway.transaction.sale({
+            'amount': f'{total_cost:.2f}',
             'payment_method_none': nonce,
             'options': {
                 'submit_for_settlement': True
@@ -220,6 +223,7 @@ class PaymentProcessView(View):
             order.paid = True
             order.braintree_id = result.transaction.id
             order.save()
+            payment_completed.delay(order.id)
             return redirect('payment-done')
         else:
             return redirect('payment-canceled')
@@ -251,8 +255,8 @@ class AdminOrderPdf(View):
         order = get_object_or_404(Order, id=order_id)
         html = render_to_string('shop/order/pdf.html', {'order': order})
         response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'filename=\"order_{}.pdf"'.format(order.id)
-        weasyprint.HTML(string=html).write_pdf(response, stylesheets=[weasyprint.CSS(
-            settings.STATIC_ROOT + 'css/pdf.css')])
-
+        response['Content-Disposition'] = f'filename=order_{order.id}.pdf'
+        weasyprint.HTML(string=html).write_pdf(response,
+            stylesheets=[weasyprint.CSS(
+                settings.STATIC_ROOT + 'css/pdf.css')])
         return response
